@@ -1,0 +1,5 @@
+Track line numbers (yylineno)
+
+Redirect output to a .log file
+
+Highlight matched tokens with colors for better CLI visibility
