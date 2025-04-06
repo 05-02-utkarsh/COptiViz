@@ -1,18 +1,4 @@
-/*Avoid naming conflicts with standard macros like INT, FLOAT, etc.
 
-Prefix token names with TOK_ or something similar.
-
-Include tokens for:
-
-All keywords, operators, and punctuation
-
-Literals (INT_LITERAL, FLOAT_LITERAL)
-
-Types and symbols
-
-Identifiers, error tokens, comments if needed
-
-Prepare for Bison integration with yylval (%union)*/
 
 
 #ifndef TOKENS_H
@@ -106,21 +92,12 @@ Prepare for Bison integration with yylval (%union)*/
 // Others
 #define TOK_ERROR             331
 
+//Micellanous
+#define TOK_DQUOTE            300
+#define TOK_SQUOTE            301
+#define TOK_BACKSLASH         302
+
+
 #endif // TOKENS_H
 
 
-/* Pro Tip:
-In your parser.y, use %token TOK_IF TOK_ELSE TOK_INT_LITERAL etc.
-
-This structure avoids conflict with standard C keywords (INT, FLOAT, etc.).
-
-Also compatible with %union to define yylval types.*/
-
-
-/*Would you like me to:
-
-  Generate a matching parser.y skeleton?
-
-  Add %union support in this file?
-
-  Add a macro for yylval (like extern YYSTYPE yylval)?*/

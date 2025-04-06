@@ -1,22 +1,27 @@
- // This file defines how different components of a C program (keywords, operators, identifiers, literals) will be tokenized.
-
- // This lexer:
- // Tokenizes keywords (e.g., int, if, while).
- // Handles operators (e.g., =, +, ==, >=).
- // Recognizes identifiers (variable names like x, count).
- // Detects numeric literals (e.g., 123, 3.14).
- // Ignores whitespace and comments.
- // Prints unknown tokens for debugging.
-
 
 %{
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "y.tab.h"
+//#include "y.tab.h"
 #include "tokens.h"
+
+
+
 // Declaring yylval because we are using Bison and want to pass values (e.g., identifiers, numbers)
+//extern YYSTYPE yylval;
+
+/*niche kis 12 se 19 tak filhaal ke liye jodi hai*/
+typedef union {
+    int ival;
+    float fval;
+    char* str;
+} YYSTYPE;
+
 extern YYSTYPE yylval;
+YYSTYPE yylval;
+
+// making comment these as i am redirecting tokens to another output file , otherwise i should have kept it.
 
 #define PRINT_TOKEN(tok) do { printf(#tok); } while(0)
 #define PRINT_TOKEN_VAL(tok, val) do { printf(#tok "(%s)\n", val); } while(0)
@@ -34,7 +39,8 @@ FLOAT_CONST  ({DIGIT}+"."{DIGIT}*|"."{DIGIT}+)
 
 %%
 
- /* Keywords */
+ /* Keywords */  
+                
 "auto"          { PRINT_TOKEN(TOK_AUTO); printf("\n"); return TOK_AUTO; }
 "break"         { PRINT_TOKEN(TOK_BREAK); printf("\n"); return TOK_BREAK; }
 "case"          { PRINT_TOKEN(TOK_CASE); printf("\n"); return TOK_CASE; }
@@ -119,6 +125,28 @@ FLOAT_CONST  ({DIGIT}+"."{DIGIT}*|"."{DIGIT}+)
 {FLOAT_CONST}   { yylval.fval = atof(yytext); PRINT_TOKEN_FLOAT(TOK_FLOAT_LITERAL, yylval.fval); return TOK_FLOAT_LITERAL; }
 {INT_CONST}     { yylval.ival = atoi(yytext); PRINT_TOKEN_INT(TOK_INT_LITERAL, yylval.ival); return TOK_INT_LITERAL; }
 
+
+ /*Micellaneous*/  
+\"          { /* double quote character */ 
+                PRINT_TOKEN(TOK_DQUOTE);
+                printf("\n");
+                return TOK_DQUOTE;
+            }
+
+\'          { /* single quote character */ 
+                PRINT_TOKEN(TOK_SQUOTE);
+                printf("\n");
+                return TOK_SQUOTE;
+            }
+
+\\          { /* backslash character */ 
+                PRINT_TOKEN(TOK_BACKSLASH);
+                printf("\n");
+                return TOK_BACKSLASH;
+            }
+
+
+
  /* Comments */
 "//".*                      ;   // Ignore single-line comments
 "/*"([^*]|\*[^/])*"\*/"     ;   // Ignore multi-line comments
@@ -143,23 +171,3 @@ int yywrap(void) {
 
 
 
-/*Use yylval to pass actual values (like strdup(yytext) for identifiers, atoi() or atof() for numbers) — required when used with Bison.
-
-Return symbolic tokens, not printf() logs — those are for debugging only.
-
-Support for operators, punctuation, and robust comment parsing included.
-
-Accepts identifiers and literals fully compliant with C syntax.
-
-Will be compatible with your parser.y Bison file.*/
-
-
-
-
-
-/*Assumptions:
-We have a corresponding tokens.h with tokens like FLOAT_LITERAL, PLUS, IF, INT, etc.
-
-yylval is declared and used properly with Bison (%union).
-
-This lexer is C99-compliant in tokenizing.*/
