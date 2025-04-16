@@ -21,7 +21,7 @@ typedef union {
 extern YYSTYPE yylval;
 YYSTYPE yylval;
 
-// making comment these as i am redirecting tokens to another output file , otherwise i should have kept it.
+
 
 #define PRINT_TOKEN(tok) do { printf(#tok); } while(0)
 #define PRINT_TOKEN_VAL(tok, val) do { printf(#tok "(%s)\n", val); } while(0)
@@ -169,5 +169,5 @@ int yywrap(void) {
 
 
 
-
+iuqrw
 
