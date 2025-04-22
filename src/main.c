@@ -2,28 +2,26 @@
 #include "ast.h"
 
 extern int yyparse();
-extern FILE* yyin;              // ✅ Declare yyin to redirect parser input
+extern FILE* yyin;              
 extern ASTNode* ast_root;
 
 int main() {
-    // Open input file
-    yyin = fopen("input.c", "r");   // ✅ Open input.c for parsing
+  
+    yyin = fopen("input.c", "r");   
     if (!yyin) {
         perror("input.c");
         return 1;
     }
 
-    // Open output file
+   
     FILE* out = fopen("output.txt", "w");
     if (!out) {
         perror("output.txt");
         return 1;
     }
 
-    // Run parser
     yyparse();
 
-    // Print AST
     fprintf(out, "AST:\n");
     print_ast(ast_root, out, 0);
 

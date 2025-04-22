@@ -20,24 +20,93 @@ ASTNode* ast_root;
 
 %token <ival> NUMBER
 %token <str> IDENTIFIER
-%type <node> stmt expr
-%left '+' '-' 
-%left '*' '/' 
-%token '=' ';'
+%token <str> STRING
+
+%token KW_INT KW_IF KW_FOR KW_RETURN
+%token LPAREN RPAREN LBRACE RBRACE SEMICOLON ASSIGN COMMA
+%token PLUS MINUS MUL DIV LT
+%token INCR DECR
+
+%type <node> stmt stmt_list compound_stmt expr expr_list decl_stmt if_stmt for_stmt return_stmt function type program simple_stmt
+
+%left PLUS MINUS
+%left MUL DIV
+
+%start program
 
 %%
 
+program:
+    function                        { ast_root = $1; }
+;
+
+function:
+    type IDENTIFIER LPAREN RPAREN compound_stmt
+                                    { $$ = make_function_node($2, $5); }
+;
+
+type:
+    KW_INT                          { $$ = make_type_node("int"); }
+;
+
+stmt_list:
+    stmt                            { $$ = $1; }
+  | stmt_list stmt                  { $$ = make_seq_node($1, $2); }
+;
+
+compound_stmt:
+    LBRACE stmt_list RBRACE         { $$ = $2; }
+;
+
 stmt:
-    IDENTIFIER '=' expr ';'     { ast_root = make_assign_node($1, $3); }
+    decl_stmt                       { $$ = $1; }
+  | expr SEMICOLON                  { $$ = $1; }
+  | if_stmt                         { $$ = $1; }
+  | for_stmt                        { $$ = $1; }
+  | return_stmt                     { $$ = $1; }
+;
+
+decl_stmt:
+    KW_INT IDENTIFIER ASSIGN expr SEMICOLON
+                                    { $$ = make_decl_node($2, $4); }
+  | KW_INT IDENTIFIER SEMICOLON     { $$ = make_decl_node($2, NULL); }
+;
+
+simple_stmt:
+    decl_stmt                       { $$ = $1; }
+  | expr SEMICOLON                  { $$ = $1; }
+;
+
+if_stmt:
+    KW_IF LPAREN expr RPAREN compound_stmt
+                                    { $$ = make_if_node($3, $5); }
+;
+
+for_stmt:
+    KW_FOR LPAREN simple_stmt expr SEMICOLON expr RPAREN compound_stmt
+                                    { $$ = make_for_node($3, $4, $6, $8); }
+;
+
+return_stmt:
+    KW_RETURN expr SEMICOLON        { $$ = make_return_node($2); }
 ;
 
 expr:
-    expr '+' expr               { $$ = make_binop_node('+', $1, $3); }
-  | expr '-' expr               { $$ = make_binop_node('-', $1, $3); }
-  | expr '*' expr               { $$ = make_binop_node('*', $1, $3); }
-  | expr '/' expr               { $$ = make_binop_node('/', $1, $3); }
-  | NUMBER                      { $$ = make_int_node($1); }
-  | IDENTIFIER                  { $$ = make_var_node($1); }
+    expr PLUS expr                  { $$ = make_binop_node('+', $1, $3); }
+  | expr MINUS expr                 { $$ = make_binop_node('-', $1, $3); }
+  | expr MUL expr                   { $$ = make_binop_node('*', $1, $3); }
+  | expr DIV expr                   { $$ = make_binop_node('/', $1, $3); }
+  | IDENTIFIER INCR                 { $$ = make_unary_node("++", make_var_node($1)); }
+  | IDENTIFIER DECR                 { $$ = make_unary_node("--", make_var_node($1)); }
+  | NUMBER                          { $$ = make_int_node($1); }
+  | STRING                          { $$ = make_string_node($1); }
+  | IDENTIFIER                      { $$ = make_var_node($1); }
+  | IDENTIFIER LPAREN RPAREN        { $$ = make_func_call_node($1, NULL); }
+  | IDENTIFIER LPAREN expr_list RPAREN
+                                    { $$ = make_func_call_node($1, $3); }
 ;
 
-%%
+expr_list:
+    expr                            { $$ = make_expr_list_node($1, NULL); }
+  | expr_list COMMA expr            { $$ = make_expr_list_node($3, $1); }
+;
