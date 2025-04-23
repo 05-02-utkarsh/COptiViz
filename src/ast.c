@@ -3,7 +3,7 @@
 #include <string.h>
 #include "ast.h"
 
-/* Create a new AST node - using your approach */
+
 ASTNode* create_node(NodeType type, const char* value) {
     ASTNode* node = (ASTNode*)malloc(sizeof(ASTNode));
     if (!node) {
@@ -20,7 +20,7 @@ ASTNode* create_node(NodeType type, const char* value) {
     return node;
 }
 
-/* Add a child node to a parent node */
+
 void add_child(ASTNode* parent, ASTNode* child) {
     if (!parent || !child) return;
     
@@ -29,12 +29,12 @@ void add_child(ASTNode* parent, ASTNode* child) {
     } else if (!parent->right) {
         parent->right = child;
     } else {
-        /* If both children exist, add as sibling to right child */
+       
         add_sibling(parent->right, child);
     }
 }
 
-/* Add a sibling node */
+
 void add_sibling(ASTNode* node, ASTNode* sibling) {
     if (!node || !sibling) return;
     
@@ -45,20 +45,20 @@ void add_sibling(ASTNode* node, ASTNode* sibling) {
     current->next = sibling;
 }
 
-/* Helper function to convert an integer to a string */
+
 static char* int_to_str(int value) {
     char buffer[32];
     snprintf(buffer, sizeof(buffer), "%d", value);
     return strdup(buffer);
 }
 
-/* Helper function for string conversion */
+
 static char* char_to_str(char c) {
     char buffer[2] = {c, '\0'};
     return strdup(buffer);
 }
 
-/* Create an integer literal node */
+
 ASTNode* make_int_node(int value) {
     char* val_str = int_to_str(value);
     ASTNode* node = create_node(NODE_INT, val_str);
@@ -66,17 +66,17 @@ ASTNode* make_int_node(int value) {
     return node;
 }
 
-/* Create a string literal node */
+
 ASTNode* make_string_node(char* value) {
     return create_node(NODE_STRING, value);
 }
 
-/* Create a variable reference node */
+
 ASTNode* make_var_node(char* name) {
     return create_node(NODE_VAR, name);
 }
 
-/* Create a binary operation node */
+
 ASTNode* make_binop_node(char op, ASTNode* left, ASTNode* right) {
     char* op_str = char_to_str(op);
     ASTNode* node = create_node(NODE_BINOP, op_str);
@@ -88,53 +88,51 @@ ASTNode* make_binop_node(char op, ASTNode* left, ASTNode* right) {
     return node;
 }
 
-/* Create a unary operation node */
+
 ASTNode* make_unary_node(char* op, ASTNode* expr) {
     ASTNode* node = create_node(NODE_UNARY, op);
     node->left = expr;
     return node;
 }
 
-/* Create a variable declaration node */
+
 ASTNode* make_decl_node(char* name, ASTNode* init_expr) {
     ASTNode* node = create_node(NODE_DECL, name);
-    node->left = init_expr;  /* Init expression is the left child */
+    node->left = init_expr;  
     return node;
 }
 
-/* Create a function call node */
+
 ASTNode* make_func_call_node(char* name, ASTNode* args) {
     ASTNode* node = create_node(NODE_FUNC_CALL, name);
-    node->left = args;  /* Arguments are stored as left child */
+    node->left = args;  
     return node;
 }
 
-/* Create a function definition node */
+
 ASTNode* make_function_node(char* name, ASTNode* body) {
     ASTNode* node = create_node(NODE_FUNC_DEF, name);
-    node->left = body;  /* Body is stored as left child */
+    node->left = body; 
     return node;
 }
 
-/* Create an if statement node */
+
 ASTNode* make_if_node(ASTNode* condition, ASTNode* then_body) {
     ASTNode* node = create_node(NODE_IF, NULL);
-    node->left = condition;   /* Condition is stored as left child */
-    node->right = then_body;  /* Then body is stored as right child */
+    node->left = condition;   
+    node->right = then_body;  
     return node;
 }
 
-/* Create a for statement node */
+
 ASTNode* make_for_node(ASTNode* init, ASTNode* condition, ASTNode* update, ASTNode* body) {
     ASTNode* node = create_node(NODE_FOR, NULL);
     
-    /* Store init as left child */
+   
     node->left = init;
     
-    /* Store condition as right child */
     node->right = condition;
     
-    /* Add update and body as siblings of condition */
     if (condition) {
         add_sibling(condition, update);
         if (update) {
@@ -145,35 +143,34 @@ ASTNode* make_for_node(ASTNode* init, ASTNode* condition, ASTNode* update, ASTNo
     return node;
 }
 
-/* Create a return statement node */
 ASTNode* make_return_node(ASTNode* expr) {
     ASTNode* node = create_node(NODE_RETURN, NULL);
-    node->left = expr;  /* Expression is stored as left child */
+    node->left = expr;  
     return node;
 }
 
-/* Create an expression list node */
+
 ASTNode* make_expr_list_node(ASTNode* expr, ASTNode* next) {
     ASTNode* node = create_node(NODE_EXPR_LIST, NULL);
-    node->left = expr;  /* Current expression is stored as left child */
-    node->next = next;  /* Next expression is stored as next sibling */
+    node->left = expr;  
+    node->next = next; 
     return node;
 }
 
-/* Create a sequence node */
+
 ASTNode* make_seq_node(ASTNode* first, ASTNode* second) {
     ASTNode* node = create_node(NODE_SEQ, NULL);
-    node->left = first;   /* First statement is stored as left child */
-    node->right = second; /* Second statement is stored as right child */
+    node->left = first;   
+    node->right = second; 
     return node;
 }
 
-/* Create a type node */
+
 ASTNode* make_type_node(char* type_name) {
     return create_node(NODE_TYPE, type_name);
 }
 
-/* Get node type as string for printing */
+
 const char* get_node_type_str(NodeType type) {
     switch (type) {
         case NODE_INT: return "INT";
@@ -194,23 +191,22 @@ const char* get_node_type_str(NodeType type) {
     }
 }
 
-/* Print the AST */
+
 void print_ast(ASTNode* node, FILE* output, int indent) {
     if (!node) return;
     
-    /* Print indentation */
+
     for (int i = 0; i < indent; i++) {
         fprintf(output, "  ");
     }
     
-    /* Print node info */
+
     fprintf(output, "%s", get_node_type_str(node->type));
     if (node->value) {
         fprintf(output, " (%s)", node->value);
     }
     fprintf(output, "\n");
-    
-    /* Print children */
+
     if (node->left) {
         print_ast(node->left, output, indent + 1);
     }
@@ -219,13 +215,13 @@ void print_ast(ASTNode* node, FILE* output, int indent) {
         print_ast(node->right, output, indent + 1);
     }
     
-    /* Print siblings */
+ 
     if (node->next) {
         print_ast(node->next, output, indent);
     }
 }
 
-/* Free AST memory */
+
 void free_ast(ASTNode* node) {
     if (!node) return;
     
