@@ -1,4 +1,5 @@
 
+
 int main() {
     int a = 5 * 3;       
     int b = 10;
@@ -13,8 +14,8 @@ int main() {
   
     int d = a + 2 * 4;    
 
-    for (int i = 0; i < 4; i++) {
-        c = c + i;
+    for (int i = 0; i < 3; i++) {
+        printf("Hello\n");
     }
     
 

@@ -852,7 +852,7 @@ case 21:
 /* rule 21 can match eol */
 YY_RULE_SETUP
 #line 40 "lexer.l"
-{ /* skip whitespace */ }
+{  }
 	YY_BREAK
 case 22:
 /* rule 22 can match eol */
