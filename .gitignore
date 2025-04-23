@@ -53,10 +53,10 @@ dkms.conf
 
 
 #lexer and flex
-*.l
+
 
 #header files
-*.h
+
 
 
 #text files
