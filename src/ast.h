@@ -67,6 +67,11 @@ ASTNode* make_seq_node(ASTNode* first, ASTNode* second);
 ASTNode* make_type_node(char* type_name);
 
 ASTNode* create_node(NodeType type, const char* value);
+
+ASTNode* optimize_ast(ASTNode* root);
+
+ASTNode* deep_copy_ast(ASTNode* node);
+
 void add_child(ASTNode* parent, ASTNode* child);
 void add_sibling(ASTNode* node, ASTNode* sibling);
 
