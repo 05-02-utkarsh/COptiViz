@@ -22,8 +22,13 @@ int main() {
 
     yyparse();
 
-    fprintf(out, "AST:\n");
+    fprintf(out, "Original AST:\n");
     print_ast(ast_root, out, 0);
+
+    ast_root=optimize_ast(ast_root);
+    
+    fprintf(out,"Optimized AST:\n");
+    print_ast(ast_root,out,0);
 
     fclose(yyin);
     fclose(out);

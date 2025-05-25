@@ -77,10 +77,8 @@ ASTNode* make_var_node(char* name) {
 }
 
 
-ASTNode* make_binop_node(char op, ASTNode* left, ASTNode* right) {
-    char* op_str = char_to_str(op);
-    ASTNode* node = create_node(NODE_BINOP, op_str);
-    free(op_str);
+ASTNode* make_binop_node(char* op, ASTNode* left, ASTNode* right) {
+    ASTNode* node = create_node(NODE_BINOP, op);
     
     node->left = left;
     node->right = right;
