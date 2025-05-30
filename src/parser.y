@@ -23,14 +23,13 @@ ASTNode* ast_root;
 %token <str> STRING
 
 %token KW_INT KW_IF KW_FOR KW_RETURN
-%token LPAREN RPAREN LBRACE RBRACE SEMICOLON ASSIGN COMMA EQ
+%token LPAREN RPAREN LBRACE RBRACE SEMICOLON ASSIGN COMMA
 %token PLUS MINUS MUL DIV LT
 %token INCR DECR
 
 %type <node> stmt stmt_list compound_stmt expr expr_list decl_stmt
                if_stmt for_stmt return_stmt function type program for_init
 
-%left EQ
 %left LT
 %left PLUS MINUS
 %left MUL DIV
@@ -97,12 +96,11 @@ return_stmt:
     ;
 
 expr:
-      expr PLUS expr                    { $$ = make_binop_node("+", $1, $3); }
-    | expr EQ expr                      { $$ = make_binop_node("==", $1, $3); }
-    | expr MINUS expr                   { $$ = make_binop_node("-", $1, $3); }
-    | expr MUL expr                     { $$ = make_binop_node("*", $1, $3); }
-    | expr DIV expr                     { $$ = make_binop_node("/", $1, $3); }
-    | expr LT expr                      { $$ = make_binop_node("<", $1, $3); }
+      expr PLUS expr                    { $$ = make_binop_node('+', $1, $3); }
+    | expr MINUS expr                   { $$ = make_binop_node('-', $1, $3); }
+    | expr MUL expr                     { $$ = make_binop_node('*', $1, $3); }
+    | expr DIV expr                     { $$ = make_binop_node('/', $1, $3); }
+    | expr LT expr                      { $$ = make_binop_node('<', $1, $3); }
     | IDENTIFIER INCR                   { $$ = make_unary_node("++", make_var_node($1)); }
     | IDENTIFIER DECR                   { $$ = make_unary_node("--", make_var_node($1)); }
     | NUMBER                            { $$ = make_int_node($1); }

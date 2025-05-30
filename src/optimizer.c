@@ -56,30 +56,13 @@ ASTNode* fold_constants(ASTNode* node) {
 
 ASTNode* eliminate_dead_code(ASTNode* node) {
     if (!node) return NULL;
-
-    // Handle if (0) → remove the whole if block
-    if (node->type == NODE_IF &&
+     if (node->type == NODE_IF &&
         node->left && node->left->type == NODE_INT &&
         strcmp(node->left->value, "0") == 0) {
-
         free_ast(node);
+
         return NULL;
     }
-
-    // Handle if (1) → replace 'if' with its body (right child)
-    if (node->type == NODE_IF &&
-        node->left && node->left->type == NODE_INT &&
-        strcmp(node->left->value, "1") == 0) {
-
-        ASTNode* body = node->right;
-        node->right = NULL;
-        free_ast(node->left);
-        free(node);  // Free the IF node
-
-        return eliminate_dead_code(body);  // Continue eliminating inside body
-    }
-
-    // Handle sequence blocks
     if (node->type == NODE_SEQ) {
         node->left = eliminate_dead_code(node->left);
 

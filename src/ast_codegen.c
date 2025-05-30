@@ -198,7 +198,6 @@ void generate_code(ASTNode *node, int indent) {
 
 // Main
 int main() {
-    printf("#include<stdio.h>\n");
     FILE *fp = fopen("output.txt", "r");
     if (!fp) {
         perror("File open failed");

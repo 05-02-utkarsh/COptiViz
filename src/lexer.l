@@ -17,7 +17,6 @@ STRING     \"[^\"]*\"
 "return"    { return KW_RETURN; }
 
 
-"=="        { return EQ; }
 "="         { return ASSIGN; }
 ";"         { return SEMICOLON; }
 ","         { return COMMA; }

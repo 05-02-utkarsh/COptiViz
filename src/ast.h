@@ -40,7 +40,7 @@ ASTNode* make_string_node(char* value);
 
 ASTNode* make_var_node(char* name);
 
-ASTNode* make_binop_node(char* op, ASTNode* left, ASTNode* right);
+ASTNode* make_binop_node(char op, ASTNode* left, ASTNode* right);
 
 ASTNode* make_unary_node(char* op, ASTNode* expr);
 

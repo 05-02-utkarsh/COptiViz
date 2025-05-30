@@ -74,14 +74,13 @@ extern int yydebug;
     SEMICOLON = 269,               /* SEMICOLON  */
     ASSIGN = 270,                  /* ASSIGN  */
     COMMA = 271,                   /* COMMA  */
-    EQ = 272,                      /* EQ  */
-    PLUS = 273,                    /* PLUS  */
-    MINUS = 274,                   /* MINUS  */
-    MUL = 275,                     /* MUL  */
-    DIV = 276,                     /* DIV  */
-    LT = 277,                      /* LT  */
-    INCR = 278,                    /* INCR  */
-    DECR = 279                     /* DECR  */
+    PLUS = 272,                    /* PLUS  */
+    MINUS = 273,                   /* MINUS  */
+    MUL = 274,                     /* MUL  */
+    DIV = 275,                     /* DIV  */
+    LT = 276,                      /* LT  */
+    INCR = 277,                    /* INCR  */
+    DECR = 278                     /* DECR  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -96,7 +95,7 @@ union YYSTYPE
     char* str;
     ASTNode* node;
 
-#line 100 "parser.tab.h"
+#line 99 "parser.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
